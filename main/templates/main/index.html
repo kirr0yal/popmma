@@ -1,0 +1,81 @@
+{% extends 'main/base.html' %}
+{% block content %}
+    <main>
+    <div class="container">
+        <div class="main-with-assert">
+            <div class="posts news-list main-with-assert-main">
+            <!--
+              <h2>{{ title }}</h2>
+            -->
+                {% for post in posts %}
+                    {% include 'main/post-item.html' %}
+                {% endfor %}
+            </div>
+
+        <script type="text/javascript">
+            console.log("")
+            $(document).ready(function () {
+                window.news_index = '{% url 'home' %}';
+
+                var page = 1;
+                var block_request = false;
+                var end_pagination = false;
+
+                $(window).scroll(function () {
+                    var margin = $(document).height() - $(window).height() - 200;
+
+                    if ($(window).scrollTop() > margin && end_pagination === false && block_request === false) {
+                        block_request = true;
+                        page += 1;
+
+                        $.ajax({
+                            type: 'GET',
+                            url: window.news_index,
+                            data: {
+                                "page": page
+                            },
+                            success: function (data) {
+                                if (data.end_pagination === true) {
+                                    end_pagination = true;
+                                } else {
+                                    block_request = false;
+                                }
+                                $('.news-list').append(data.content);
+                            }
+                        })
+                    }
+                });
+            })
+        </script>
+
+            <div class="assert">
+                <div class="main-with-assert-assert">
+                    <h2 class="aside-h2">Ближайшие турниры</h2>
+                    <ul>
+                        <li class="assert-li"> Almaty, Kazakhstan</li>
+                        <li class="assert-li"> Moscow, Russia</li>
+                    </ul>
+                </div>
+
+                <div class="main-with-assert-assert">
+                    <h2 class="aside-h2">Рейтинги</h2>
+                    <ul>
+                        <li class="assert-li"> CH Lorem, Ipsum</li>
+                        <li class="assert-li"> #1 Lorem, Ipsum</li>
+                        <li class="assert-li"> #2 Lorem, Ipsum</li>
+                        <li class="assert-li"> #3 Lorem, Ipsum</li>
+                        <li class="assert-li"> #4 Lorem, Ipsum</li>
+                        <li class="assert-li"> #5 Lorem, Ipsum</li>
+                        <li class="assert-li"> #6 Lorem, Ipsum</li>
+                        <li class="assert-li"> #7 Lorem, Ipsum</li>
+                        <li class="assert-li"> #8 Lorem, Ipsum</li>
+                        <li class="assert-li"> #9 Lorem, Ipsum</li>
+                        <li class="assert-li"> #10 Lorem, Ipsum</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </main>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'main/index.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="post-item">
+        <h1 style="color: white">{{ post.title }}</h1>
+
+        {% if post.video %}
+            <iframe width="750" height="420" src="{{ post.video }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        {% endif %}
+
+        <p style="color: white">{{ post.content}}</p>
+    </div>
+</div>
+{% endblock %}

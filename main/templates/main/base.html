@@ -1,0 +1,142 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>POP MMA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static "main/css/styles.css" %}">
+<link rel="stylesheet" href="{% static "main/css/bootstrap.min.css" %}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+</head>
+<body>
+<div class="page-layout">
+<header class="header">
+    <div class="container">
+        <div class="header__title">
+            <a href="/"><img src="../../static/main/images/logo.png" alt="logo" class="logo"></a>
+
+            <!-- Button -->
+            <button class="login-button" type="button" href="" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Войти
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                      <h2 class="fs-5">Авторизация</h2>
+                        <form action="login/" method="post">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                              <label for="email" class="form-label">Введите E-mail</label>
+                              <input name="email" type="email" class="form-control" id="email" required>
+                            </div>
+                            <div class="mb-3">
+                              <label for="password" class="form-label">Пароль</label>
+                              <input name="password" type="password" class="form-control" id="password">
+                            </div>
+                            {% if message %}
+                            <div class="alert alert-danger" role="alert">
+                              {{ message }}
+                            </div>
+                            {% endif %}
+                            <input type="submit" class="btn btn-success" value="Войти">
+                        </form>
+
+                      <hr>
+
+                      <h2 class="fs-5">Регистрация</h2>
+                      <form action="" method="post">
+                         {% csrf_token %}
+                        <div class="mb-3">
+                          <label for="email" class="form-label">E-mail</label>
+                          <input name="email" type="email" class="form-control" id="email" placeholder="name@example.com" required>
+                        </div>
+                        <div class="mb-3">
+                          <label for="username" class="form-label">Никнейм</label>
+                          <input name="username" type="text" class="form-control" id="username" placeholder="username" required>
+                        </div>
+                        <div class="mb-3">
+                          <label for="password" class="form-label">Пароль</label>
+                          <input name="password" type="password" class="form-control" id="password" placeholder="password" required>
+                        </div>
+                        <div class="mb-3">
+                          <label for="password2" class="form-label">Повторите пароль</label>
+                          <input name="password2" type="password" class="form-control" id="password2" placeholder="confirm password" required>
+                        </div>
+                        {% if message %}
+                        <div class="alert alert-danger" role="alert">
+                          {{ message }}
+                        </div>
+                        {% endif %}
+                        <input type="submit" class="btn btn-primary" value="Зарегистрироваться">
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Modal end-->
+
+        </div>
+    </div>
+</header>
+{#    {% if user %}#}
+{#        <p style="color: red">Добро пожаловать, {{ user.email }}!</p>#}
+{#    {% endif %}#}
+{#        <p><a href="/logout">Выйти</a></p>#}
+{% block content %}
+{% endblock %}
+
+
+
+
+</div>
+    <script>
+                // получаем ссылку на модальное окно
+        const modal = document.getElementById('exampleModal');
+
+        // получаем ссылку на форму
+        const form = modal.querySelector('form');
+
+        // при отправке формы останавливаем событие по умолчанию и отправляем запрос на сервер
+        form.addEventListener('submit', async (event) => {
+          event.preventDefault();
+
+          try {
+            // отправляем POST-запрос
+            console.log(form)
+            const response = await fetch('login/', {
+              method: 'POST',
+              body: new FormData(form),
+            });
+
+            // получаем содержимое ответа
+            const responseData = await response.json();
+
+            // если в ответе есть поле 'message', то выводим его и не закрываем модальное окно
+            if (responseData.message) {
+              const messageDiv = form.querySelector('.alert');
+              messageDiv.innerHTML = responseData.message;
+              messageDiv.classList.add('alert-danger');
+            } else {
+              // закрываем модальное окно, если ответ от сервера не содержит ошибок
+              const modalInstance = bootstrap.Modal.getInstance(modal);
+              modalInstance.hide();
+            }
+          } catch (error) {
+            console.error('Error:', error);
+          }
+        });
+
+    </script>
+    <script src="{% static "main/js/bootstrap.min.js" %}"></script>
+</body>
+
+</html>

@@ -1,0 +1,10 @@
+<div class="post">
+    <a href="{{ post.get_absolute_url }}" style="text-decoration: none">
+        <h2 class="text-h2">{{ post.title }}</h2>
+        <h3 class="text-h3">{{ post.subtitle }}</h3>
+    {% if post.photo %}
+        <p><img height="355" src="{{ post.photo.url }}" alt="{{ post.title }}"></p>
+    {% endif %}
+        <h4 class="text-h4">{{ post.created_at|date:"m.d в h:m"}}</h4>
+    </a>
+</div>
